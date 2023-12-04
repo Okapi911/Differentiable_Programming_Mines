@@ -1,4 +1,4 @@
-### Generation de description d'image.
+# Generation de description d'image.
 
 ## Choix de la base de données :
 
@@ -6,16 +6,16 @@ Database Hugging face contenant 7999 éléments, majoritairement des portraits d
 
 ## Choix de la méthode d'entrainement du modèle
 
-# Besoin d'extraire les features de l'image
+### Besoin d'extraire les features de l'image
 
 Création de notre propre CNN pour extraire les features de l'image et fournir du texte à un modèle NLP.
 
-# Choix du modèle de NLP
+### Choix du modèle de NLP
 
 Choix d'un GPT plutôt qu'un BERT car pas de nécessité de classification.
 
 ## Avancée du projet
 
-# Samedi 2 décembre :
+### Samedi 2 décembre :
 
 Mise en marche du projet. Début du travail sur notre CNN.
