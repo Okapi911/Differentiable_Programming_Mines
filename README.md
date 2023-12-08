@@ -33,3 +33,8 @@ L'idée sera d'enlever la dernière étape du CNN pour y ajouter ce qui nous int
 Pour le début du projet, nous nous basons sur cette vidéo. Nous verrons ensuite pour remplacer le LSTM par un GPT.
 
 https://www.youtube.com/watch?v=y2BaTt1fxJU
+
+### Vendredi 8 décembre
+
+Tentative d'implémentation de l'exemple de la vidéo. Encore quelques erreurs à corriger, pas encore push.
+Pre processing des data effectué, rotation de certaines images et élimination des caption générés automatiquement ne faisant pas sens. (kettle kettle kettle kettle kettle kettle kettle kettle kettle kettle kettle kettle)
