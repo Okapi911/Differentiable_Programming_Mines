@@ -6,6 +6,9 @@ from torch.nn.utils.rnn import pad_sequence  # pad batch
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image  # Load img
 import torchvision.transforms as transforms
+import spacy.cli
+
+#spacy.cli.download("en_core_web_lg")
 
 
 # We want to convert text -> numerical values

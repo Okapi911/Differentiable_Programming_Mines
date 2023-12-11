@@ -26,8 +26,8 @@ def train():
     )
 
     train_loader, dataset = get_loader(
-        root_folder="./Differentiable_Programming_Mines/flickr8k/images",
-        annotation_file="./Differentiable_Programming_Mines/flickr8k/captions.txt",
+        root_folder="./flickr8k/images",
+        annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2,
     )
@@ -43,7 +43,7 @@ def train():
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 100
+    num_epochs = 5
 
     # for tensorboard
     writer = SummaryWriter("runs/flickr")
@@ -65,6 +65,8 @@ def train():
         step = model.load_state_dict(torch.load("model_image_captioning.pt"))#load_checkpoint(torch.load("my_checkpoint.pth.tar"), model, optimizer)
 
     model.train()
+
+    losses = []
 
     for epoch in range(num_epochs):
         # Uncomment the line below to see a couple of test cases
@@ -89,6 +91,8 @@ def train():
                 outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1)
             )
 
+            losses.append(loss.item())
+
             writer.add_scalar("Training loss", loss.item(), global_step=step)
             step += 1
 
@@ -96,8 +100,17 @@ def train():
             loss.backward(loss)
             optimizer.step()
 
-    return model
+    return model, dataset, losses
 
 
 if __name__ == "__main__":
-    train()
+    model, dataset, losses = train()
+    print('finished normally')
+    torch.save(model.state_dict(), 'model_image_captioning.pt')
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(losses)
+    plt.show()
+
+    torch.save(losses, 'losses.pt')
