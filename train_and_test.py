@@ -11,11 +11,12 @@ from few_examples_results import print_examples
 import torch.optim as optim
 from get_loader import get_loader
 from torch.utils.tensorboard import SummaryWriter
+from eval_model import eval_CNN_to_RNN
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using {} device".format(device))
 
-def train():
+def train(batch_size):
     transform = transforms.Compose(
         [
             transforms.Resize((356, 356)),
@@ -25,11 +26,13 @@ def train():
         ]
     )
 
+    
     train_loader, dataset = get_loader(
         root_folder="./flickr8k/images",
         annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2,
+        batch_size = batch_size
     )
 
     torch.backends.cudnn.benchmark = True
@@ -43,7 +46,8 @@ def train():
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 10
+    num_epochs = 1
+
 
     # for tensorboard
     writer = SummaryWriter("runs/flickr")
@@ -59,7 +63,7 @@ def train():
         if "fc.weight" in name or "fc.bias" in name:
             param.requires_grad = True
         else:
-            param.requires_grad = True
+            param.requires_grad = train_CNN
 
     if load_model:
         step = model.load_state_dict(torch.load("model_image_captioning.pt"))#load_checkpoint(torch.load("my_checkpoint.pth.tar"), model, optimizer)
@@ -67,10 +71,12 @@ def train():
     model.train()
 
     losses = []
+    losses_per_epoch = []
+    valid_losses = []
 
     for epoch in range(num_epochs):
-        # Uncomment the line below to see a couple of test cases
-        # print_examples(model, device, dataset)
+
+        loss_this_epoch = 0.
 
         if save_model:
             checkpoint = {
@@ -92,6 +98,7 @@ def train():
             )
 
             losses.append(loss.item())
+            loss_this_epoch += loss.item()
 
             writer.add_scalar("Training loss", loss.item(), global_step=step)
             step += 1
@@ -99,18 +106,51 @@ def train():
             optimizer.zero_grad()
             loss.backward(loss)
             optimizer.step()
+        
+        loss_this_epoch = loss_this_epoch/(len(train_loader)*batch_size)
+        losses_per_epoch.append(loss_this_epoch)
 
-    return model, dataset, losses
+        valid_loss = eval_CNN_to_RNN(model, train_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]))
+        valid_losses.append(valid_loss)
+
+    return model, train_loader, dataset, losses, losses_per_epoch, valid_loss
 
 
 if __name__ == "__main__":
-    model, dataset, losses = train()
+    batch_size=32
+    model, train_loader, dataset, losses, losses_per_epoch, valid_loss = train(batch_size)
     print('finished normally')
-    torch.save(model.state_dict(), 'model_image_captioning.pt')
+    torch.save(model.state_dict(), 'model_image_captioning3.pt')
 
     import matplotlib.pyplot as plt
 
     plt.plot(losses)
     plt.show()
 
-    torch.save(losses, 'losses.pt')
+    torch.save(losses, 'losses3.pt')
+
+    plt.plot(losses_per_epoch)
+    plt.plot(valid_loss)
+    plt.show()
+
+    torch.save(losses_per_epoch, 'losses_per_epoch3.pt')
+
+    #Tests
+
+    #To change
+    test_loader = train_loader
+
+    score_test = eval_CNN_to_RNN(model, test_loader, nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]))
+
+    print('validation loss =' + str(score_test))
+    torch.save(score_test, 'losses_test3.pt')
+
+    image_batch_example, labels_batch_example = next(iter(test_loader))
+    plt.figure(figsize=(10,6))
+    for ib in range (batch_size):
+        plt.subplot(batch_size // 4, 4, ib+1)
+        plt.imshow(image_batch_example[ib,:].squeeze().detach())
+        plt.xticks([]), plt.yticks([])
+        plt.title('Image caption = ' + str(labels_batch_example[ib].item()))
+
+

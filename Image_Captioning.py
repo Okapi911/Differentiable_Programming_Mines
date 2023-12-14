@@ -5,7 +5,7 @@ import torchvision.models as models
 class EncoderCNN(nn.Module):
     def __init__(self, embed_size, train_CNN=False):
         super(EncoderCNN, self).__init__()
-        self.inception = models.inception_v3(pretrained=True, aux_logits=True)
+        self.inception = models.inception_v3(weights='Inception_V3_Weights.DEFAULT', aux_logits=True)
         self.last_layer = nn.Sequential(nn.Linear(self.inception.fc.in_features, embed_size), nn.ReLU(), nn.Dropout(0.5)) #We add a last layer so that we have embeddings of the specified size
         self.inception.fc = self.last_layer
         for name, param in self.inception.named_parameters():
