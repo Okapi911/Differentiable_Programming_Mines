@@ -35,7 +35,7 @@ def train():
     torch.backends.cudnn.benchmark = True
     load_model = False
     save_model = False
-    train_CNN = False
+    train_CNN = True
 
     # Hyperparameters
     embed_size = 256
@@ -43,7 +43,7 @@ def train():
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 5
+    num_epochs = 10
 
     # for tensorboard
     writer = SummaryWriter("runs/flickr")
@@ -59,7 +59,7 @@ def train():
         if "fc.weight" in name or "fc.bias" in name:
             param.requires_grad = True
         else:
-            param.requires_grad = train_CNN
+            param.requires_grad = True
 
     if load_model:
         step = model.load_state_dict(torch.load("model_image_captioning.pt"))#load_checkpoint(torch.load("my_checkpoint.pth.tar"), model, optimizer)
