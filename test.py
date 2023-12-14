@@ -11,6 +11,9 @@ from few_examples_results import print_examples
 import torch.optim as optim
 from get_loader import get_loader
 from torch.utils.tensorboard import SummaryWriter
+from Image_Captioning import CNN_TO_RNN
+
+
 
 losses = torch.load('losses.pt')
 
@@ -19,10 +22,15 @@ import matplotlib.pyplot as plt
 plt.plot(losses)
 plt.show()
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using {} device".format(device))
 
-model = torch.load('model_image_captioning.pt')
+
+embed_size = 256
+hidden_size = 256
+num_layers = 1
+learning_rate = 3e-4
+num_epochs = 5
+
+
 
 transform = transforms.Compose(
         [
@@ -39,12 +47,18 @@ _, dataset = get_loader(
         num_workers=2,
     )
 
+vocab_size = len(dataset.vocab)
+
+model = CNN_TO_RNN(embed_size, hidden_size, vocab_size, num_layers)
+model.load_state_dict(torch.load('model_image_captioning.pt'))
+#model = torch.load('model_image_captioning.pt')
+
 model.eval()
 test_img1 = transform(Image.open("Examples/dog.jpg").convert("RGB")).unsqueeze(
         0
     )
-print("Example 1 CORRECT: Dog on a beach by the ocean")
+print("Example 1: Dog on a beach by the ocean")
 print(
         "Example 1 OUTPUT: "
-        + " ".join(model.caption_image(test_img1.to(device), dataset.vocab))
+        + " ".join(model.caption_image(test_img1, dataset.vocab))
     )
