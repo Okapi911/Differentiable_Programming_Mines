@@ -110,7 +110,9 @@ def train(batch_size):
         loss_this_epoch = loss_this_epoch/(len(train_loader)*batch_size)
         losses_per_epoch.append(loss_this_epoch)
 
-        valid_loss = eval_CNN_to_RNN(model, train_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]))
+        torch.save(model.state_dict(), 'model_temp.pt')
+
+        valid_loss = eval_CNN_to_RNN('model_temp.pt', train_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]), embed_size=embed_size, hidden_size=hidden_size, vocab_size=vocab_size, num_layers=num_layers)
         valid_losses.append(valid_loss)
 
     return model, train_loader, dataset, losses, losses_per_epoch, valid_loss
@@ -134,23 +136,25 @@ if __name__ == "__main__":
     plt.show()
 
     torch.save(losses_per_epoch, 'losses_per_epoch3.pt')
+    torch.save(valid_loss, 'valid_loss3.pt')
 
     #Tests
 
     #To change
     test_loader = train_loader
-
+    
+    """
     score_test = eval_CNN_to_RNN(model, test_loader, nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]))
 
-    print('validation loss =' + str(score_test))
+    print('test loss =' + str(score_test))
     torch.save(score_test, 'losses_test3.pt')
-
+    
     image_batch_example, labels_batch_example = next(iter(test_loader))
     plt.figure(figsize=(10,6))
     for ib in range (batch_size):
         plt.subplot(batch_size // 4, 4, ib+1)
-        plt.imshow(image_batch_example[ib,:].squeeze().detach())
+        plt.imshow(image_batch_example[ib,:].squeeze().detach().permute(1,2,0))
         plt.xticks([]), plt.yticks([])
         plt.title('Image caption = ' + str(labels_batch_example[ib].item()))
-
-
+    
+    """

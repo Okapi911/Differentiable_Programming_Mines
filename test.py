@@ -13,7 +13,8 @@ from get_loader import get_loader
 from torch.utils.tensorboard import SummaryWriter
 from Image_Captioning import CNN_TO_RNN
 
-
+valid_loss = torch.load('valid_loss3.pt')
+print(valid_loss)
 
 losses = torch.load('losses.pt')
 
