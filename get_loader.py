@@ -71,11 +71,13 @@ class FlickrDataset(Dataset):
         # Get img, caption columns
         self.imgs = self.df["image"]
         self.captions = self.df["caption"]
+        
+        self.captions = self.captions[:32000]
 
         # Initialize vocabulary and build vocab
         self.vocab = Vocabulary(freq_threshold)
         self.vocab.build_vocabulary(self.captions.tolist())
-
+  
     def __len__(self):
         return len(self.df)
 
@@ -119,9 +121,43 @@ def get_loader(
     dataset = FlickrDataset(root_folder, annotation_file, transform=transform)
 
     pad_idx = dataset.vocab.stoi["<PAD>"]
+    
+    num_train = int(len(dataset) * 0.7)
+    num_valid = int(len(dataset) * 0.15)
+    num_test = len(dataset) - num_train - num_valid
+    
+    train =  []
+    for i in range(0, num_train):
+        train.append(dataset[i])
+        
+    valid = []
+    for i in range(num_train, num_train + num_valid):
+        valid.append(dataset[i])
+        
+    test = []
+    for i in range(num_train + num_valid, len(dataset)):
+        test.append(dataset[i])
 
-    loader = DataLoader(
-        dataset=dataset,
+    train_loader = DataLoader(
+        dataset=train,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        shuffle=shuffle,
+        pin_memory=pin_memory,
+        collate_fn=MyCollate(pad_idx=pad_idx),
+    )
+    
+    valid_loader = DataLoader(
+        dataset=valid,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        shuffle=shuffle,
+        pin_memory=pin_memory,
+        collate_fn=MyCollate(pad_idx=pad_idx),
+    )
+    
+    test_loader = DataLoader(
+        dataset=test,
         batch_size=batch_size,
         num_workers=num_workers,
         shuffle=shuffle,
@@ -129,7 +165,7 @@ def get_loader(
         collate_fn=MyCollate(pad_idx=pad_idx),
     )
 
-    return loader, dataset
+    return train_loader, valid_loader, test_loader, dataset
 
 
 if __name__ == "__main__":
@@ -143,10 +179,10 @@ if __name__ == "__main__":
     files = os.listdir(cwd)  # Get all the files in that directory
     print("Files in %r: %s" % (cwd, files))
 
-    loader, dataset = get_loader(
-        "./Differentiable_Programming_Mines/flickr8k/images/", "./Differentiable_Programming_Mines/flickr8k/captions.txt", transform=transform
+    train_loader, valid_loader, test_loader, dataset = get_loader(
+        "./flickr8k/images/", "./flickr8k/captions.txt", transform=transform
     )
 
-    for idx, (imgs, captions) in enumerate(loader):
+    for idx, (imgs, captions) in enumerate(train_loader):
         print(imgs.shape)
         print(captions.shape)

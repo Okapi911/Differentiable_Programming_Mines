@@ -27,12 +27,13 @@ def train(batch_size):
     )
 
     
-    train_loader, dataset = get_loader(
+    train_loader, valid_train, test_loader, dataset = get_loader(
         root_folder="./flickr8k/images",
         annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2,
-        batch_size = batch_size
+        batch_size = batch_size,
+        type = 'train'
     )
 
     torch.backends.cudnn.benchmark = True
