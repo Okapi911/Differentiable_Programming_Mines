@@ -79,7 +79,7 @@ class FlickrDataset(Dataset):
         self.vocab.build_vocabulary(self.captions.tolist())
   
     def __len__(self):
-        return len(self.df)
+        return len(self.captions)
 
     def __getitem__(self, index):
         caption = self.captions[index]
@@ -123,7 +123,9 @@ def get_loader(
     pad_idx = dataset.vocab.stoi["<PAD>"]
     
     num_train = int(len(dataset) * 0.7)
-    num_valid = int(len(dataset) * 0.15)
+    #print(num_train)
+    #print(dataset.__len__())
+    num_valid = int(len(dataset) * 0.12)
     num_test = len(dataset) - num_train - num_valid
     
     train =  []
@@ -183,6 +185,6 @@ if __name__ == "__main__":
         "./flickr8k/images/", "./flickr8k/captions.txt", transform=transform
     )
 
-    for idx, (imgs, captions) in enumerate(train_loader):
+    """for idx, (imgs, captions) in enumerate(train_loader):
         print(imgs.shape)
-        print(captions.shape)
+        print(captions.shape)"""
