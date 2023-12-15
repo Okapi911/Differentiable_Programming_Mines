@@ -46,7 +46,7 @@ def train(batch_size):
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 100
+    num_epochs = 2
 
 
     # for tensorboard
@@ -115,30 +115,30 @@ def train(batch_size):
         valid_loss = eval_CNN_to_RNN('model_temp.pt', valid_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]), embed_size=embed_size, hidden_size=hidden_size, vocab_size=vocab_size, num_layers=num_layers)
         valid_losses.append(valid_loss)
 
-    return model, train_loader, dataset, losses, losses_per_epoch, valid_loss, valid_loader, test_loader
+    return model, train_loader, dataset, losses, losses_per_epoch, valid_losses, valid_loader, test_loader
 
 
 if __name__ == "__main__":
     batch_size=32
-    model, train_loader, dataset, losses, losses_per_epoch, valid_loss, valid_loader, test_loader = train(batch_size)
+    model, train_loader, dataset, losses, losses_per_epoch, valid_losses, valid_loader, test_loader = train(batch_size)
     print('finished normally')
-    torch.save(model.state_dict(), 'model_image_captioning3.pt')
+    torch.save(model.state_dict(), 'model_image_captioning4.pt')
 
     import matplotlib.pyplot as plt
 
     plt.plot(losses)
     plt.show()
 
-    torch.save(losses, 'losses3.pt')
+    torch.save(losses, 'losses4.pt')
 
     plt.plot(losses_per_epoch)
-    plt.plot(valid_loss)
+    plt.plot(valid_losses)
     plt.show()
 
-    torch.save(losses_per_epoch, 'losses_per_epoch3.pt')
-    torch.save(valid_loss, 'valid_loss3.pt')
+    torch.save(losses_per_epoch, 'losses_per_epoch4.pt')
+    torch.save(valid_losses, 'valid_loss4.pt')
 
-    torch.save(test_loader, 'test_loader.pt')
+    torch.save(test_loader, 'test_loader4.pt')
 
     #Tests
 
