@@ -46,7 +46,7 @@ def train(batch_size):
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 2
+    num_epochs = 40
 
 
     # for tensorboard
@@ -75,6 +75,8 @@ def train(batch_size):
     valid_losses = []
 
     for epoch in range(num_epochs):
+
+        print(epoch)
 
         loss_this_epoch = 0.
 
@@ -122,23 +124,23 @@ if __name__ == "__main__":
     batch_size=32
     model, train_loader, dataset, losses, losses_per_epoch, valid_losses, valid_loader, test_loader = train(batch_size)
     print('finished normally')
-    torch.save(model.state_dict(), 'model_image_captioning4.pt')
+    torch.save(model.state_dict(), 'model_image_captioningf.pt')
 
     import matplotlib.pyplot as plt
 
     plt.plot(losses)
     plt.show()
 
-    torch.save(losses, 'losses4.pt')
+    torch.save(losses, 'lossesf.pt')
 
     plt.plot(losses_per_epoch)
     plt.plot(valid_losses)
     plt.show()
 
-    torch.save(losses_per_epoch, 'losses_per_epoch4.pt')
-    torch.save(valid_losses, 'valid_loss4.pt')
+    torch.save(losses_per_epoch, 'losses_per_epochf.pt')
+    torch.save(valid_losses, 'valid_lossf.pt')
 
-    torch.save(test_loader, 'test_loader4.pt')
+    torch.save(test_loader, 'test_loaderf.pt')
 
     #Tests
 
