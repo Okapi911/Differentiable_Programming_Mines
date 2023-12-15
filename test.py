@@ -18,18 +18,17 @@ from dataset_getter import get_dataset
 import matplotlib.image as mpimg
 
 
-valid_loss = torch.load('valid_loss3.pt')
-print(valid_loss)
+valid_loss = torch.load('valid_lossf.pt')
 plt.plot(valid_loss)
 plt.show()
 
-losses = torch.load('losses.pt')
+losses = torch.load('lossesf.pt')
 plt.plot(losses)
 plt.show()
 
 
 
-losses = torch.load('losses_per_epoch.pt')
+losses = torch.load('losses_per_epochf.pt')
 plt.plot(losses)
 plt.show()
 
@@ -51,35 +50,33 @@ transform = transforms.Compose(
         ]
     )
 
-"""
+
 _, _, test_loader, dataset = get_loader(
         root_folder="./flickr8k/images",
         annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2,
     )
-"""
 
+"""
 dataset = get_dataset(
         root_folder="./flickr8k/images",
         annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2)
+"""
 
 
-#vocab_size = len(dataset.vocab)
-vocab_size = 2994
-print(vocab_size)
-print(len(dataset))
+vocab_size = len(dataset.vocab)
 
 
 model = CNN_TO_RNN(embed_size, hidden_size, vocab_size, num_layers)
-model.load_state_dict(torch.load('model_image_captioning.pt'))
+model.load_state_dict(torch.load('model_image_captioningf.pt'))
 #model = torch.load('model_image_captioning.pt')
-"""
+
 test_loss = eval_CNN_to_RNN('model_image_captioning3.pt', test_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]), embed_size=embed_size, hidden_size=hidden_size, vocab_size=vocab_size, num_layers=num_layers)
 print("The value of the loss on the test dataset is t_loss = " + str(test_loss))
-"""
+
 
 model.eval()
 
