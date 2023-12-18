@@ -80,8 +80,8 @@ Tout d'abord, nous avons choisi de tester le modèle sur des images trouvées su
         <img src="Examples/bus.png" alt="Bus">
         </figure> <br>
     <figure>
-        <img src="Examples/child.jpg" alt="Child">
         <figcaption>Exemple 3 : a little girl in a pink shirt is walking on a sidewalk.</figcaption>
+        <img src="Examples/child.jpg" alt="Child">
     </figure> <br>
     <figure>
         <figcaption>Exemple 4 : a dog is running through the water.</figcaption>
@@ -104,7 +104,7 @@ Intéressons nous maintenant aux images présentent dans la base de test, qui vo
 
 <center>
     <figure>
-        <figcaption>Exemple 6 : A man wearing a orange vest is canoeing in the blue water.</figcaption>
+        <figcaption>Exemple 6 : A man wearing a orange vest is canoeing in the blue water.</figcaption><br>
         <figcaption>Prediction : a man in a red jacket is standing on a rock overlooking a lake.</figcaption>
         <img src="Examples/866841633_05d273b96d.jpg" alt="Boat">
     </figure>
