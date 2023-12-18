@@ -29,8 +29,8 @@ Lorsque l'on s'intéresse aux images, on trouve globalement des images de bonne 
 
 <center>
     <figure>
-        <img src="Examples/406649244_6871199386308349_6334146827423538774_n.png" alt="8 images de la base de train">
         <figcaption>Images tirées aléatoirement de la base de test</figcaption>
+        <img src="Examples/406649244_6871199386308349_6334146827423538774_n.png" alt="8 images de la base de train">
     </figure>
 </center>
 
@@ -47,13 +47,13 @@ La liste suivante a été réalisée de manière similaire en prenant les associ
 
 <center>
     <figure>
+    <figcaption>Suites de deux mots les plus utilisés dans les descriptions.</figcaption>
+    </figure>
         <img src="Examples/most_used_two_words.png" alt="Most used associations of two words">
-        <figcaption>Suites de deux mots les plus utilisés dans les descriptions.</figcaption>
-    </figure><br>
     <figure>
-        <img src="Examples/most_used_three_words.png" alt="Most used associations of three words">
         <figcaption>Suites de trois mots les plus utilisés dans les descriptions.</figcaption>
-    </figure><br>
+        <img src="Examples/most_used_three_words.png" alt="Most used associations of three words">   
+    </figure>
 </center>
 
 Ces listes seront utiles pour interpreter les résultats obtenus au moment de la phase de test du modèle.
