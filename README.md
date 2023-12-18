@@ -71,12 +71,57 @@ Comme on l'observait plus tôt sur la figure précédente, la loss sur la base d
 
 Pour conclure cette partie sur la période d'apprentissage, on pourra ajouter que lors de cette expérience nous étion passé en tuning complet du modèle convolutionnel InceptionV3 : après avoir effectué des tests comparatifs de modèles entraînés sur 10 epochs nous avons constatés que la capacité de généralisation du modèle s'améliorait si on autorisait la backpropagation jusqu'aux couches de convolution plutôt que de l'utiliser uniquement pour le fine tuning de la nouvelle partie fully-connected que nous avons ajouté (qui n'est pas une tête de classification puisqu'au contraire on retarde cette tâche en sortie du LSTM).
 
+## Influence des Hyperparamètres
+
+Comme indiqué dans la partie traitant de l'entraînement de notre modèle le plus poussé, nous avons un total de 3 hyperparamètres dans notre modèle (outre le nombre d'epochs d'apprentissage). Ils correspondent au taux d'apprentissage, à la probabilité de Dropout, et la taille des Batch dans les différents dataloaders (ici comme souvent cette taille sera la même pour entraînement, validation et test).
+
+Le taux d'apprentissage et la probabilité de Dropout auront été choisis après avoir réalisé des études documentaires dans le domaine spécifique de l'image captioning et en ayant entraîné quelques modèles sur un nombre réduit d'epochs. Ces tests nous ont permis d'observer que les meilleures valeurs de Dropout sont dans l'intervalle [0.11 ; 0.24] pour avoir des loss par image de test inférieures en moyenne à 0.15.
+
+Concernant le choix du taux d'apprentissage, on s'est demandé pourquoi prendre une valeur si basse quand le score de validation convergeait encore vers des valeurs que nous jugions trop hautes en fin d'entraînement (avec une qualité discutable des échantillons de tests comme montré précédemment) et puisque la training loss ne converge pas pendant nos entraînements.
+
+Ainsi, même si nos recherches documentaires s'accordaient pour des valeurs du learning rate de l'ordre de 10^-4 nous avons réalisé un test en l'augmentant à 10^-3 pour un entraînement de 10 epochs. Sur cet entraînement nous avons également fait le choix d'augmenter la régularisation pour lisser les courbes en profitant de la SGD avec des batchs plus réduits (16 images par batch). Les résultats (comparés aux 10 premières époques du modèle précédemment décrits) ont été les suivants :
+
+<figure><center>
+<img src="./Autres figures rapport/Entraînements comparés.png">
+<center><label>Courbes de loss sur les datasets d'entraînement sur l'ancien modèle (courbe orange : lr = 3e-4 ; batch_size=32) et sur le nouveau (en bleu ; lr = 1e-3 ; batch_size = 16).</label></center>
+</center></figure>
+
+<figure><center>
+<img src="./Autres figures rapport/Validations_comparées.png">
+<center><label>Courbes de loss sur les datasets de validation sur l'ancien modèle (en orange ; lr = 3e-4 ; batch_size=32) et sur le nouveau (en bleu ; lr = 1e-3 ; batch_size = 16).</label></center>
+</center></figure>
+
+Ces courbes montrent bien que le modèle précédent était meilleur : la loss à l'apprentissage y était inférieure à chaque epoch et l'on avait aucun surapprentissage. En revanche avec le nouveau modèle la loss sur le dataset d'entraînement semble se diriger vers un moins bon minimum (puisqu'on semble converger vers une valeur supérieure de loss). De plus ce nouveau modèle est en surapprentissage comme démontré par la courbe de loss à chaque validation : la loss diminue sur seulement 4 epochs avant d'augmenter de nouveau ce qui signifie que la capacité de prédiction diminue très vite. Pour empêcher ce surapprentissage on aurait pu augmenter encore davantage la régularisation notammentr au travers du dropout. En l'état les seules circonstances dans lesquelles ce deuxième modèle est meilleur est un entraînement de 4 epochs ou moins puisqu'alors on n'a pas de surapprentissage et on a des meilleurs scores de validation (car un learning rate plus élevé a permis de changer plus vite les paramètres du modèle). Néanmoins on conçoit bien que l'on n'a aucune raison de faire ce choix : en 4 epochs la qualité prédictive du modèle est tout au mieux médiocre (toutes les images de chiens de la partie précédente conduisant par exemple à la même description qui ne s'applique à aucune des : "a dog is running in the snow").
+
+## Préconisations
+
+Une question fondamentale subsiste après ces analyses : comment améliorer la capacité de prédiction du modèle ? En effet, puisque changer les hyperparamètres ne permet pas d'obtenir des résultats plus satisfaisants et que nous avons constaté que même notre meilleur modèle produit de nouvelles descriptions assez éloignées des résultats attendus, on voudrait trouver d'autres moyens pour obtenir un modèle plus performant qui puisse véritablement être utilisé dans un contexte réel (en particulier pour les malvoyants).
+
+- La première chose à faire serait d'augmenter la durée d'entraînement (en termes d'epochs) : même si la loss de validation semble déjà avoir convergé en 40 epochs, tant qu'elle ne remonte pas on a tout intérêt à poursuivre l'apprentissage de la base d'entraînement (qui lui n'avait pas convergé) pour peut-être gagner des résultats un peu meilleurs même s'ils ne correspondent pas exactement aux descriptions déjà écrites.
+
+- Changer ou approfondir le dataset utilisé pour l'entraînement. Le Dataset choisi n'est pas idéal car comme nous l'avons montré certains objets ou mots sont beaucoup plus récurrents que d'autres (man plus que woman ; dog plus que tout autre animal...) ce qui biaise le modèle et limite sa capacité de généralisation. Nous pouvons soit y ajouter de nouvelles images et descriptions pour espérer corriger les biais repérés par l'étude des occurences fréquentes, soit changer complètement de Dataset. Par exemple, si nous avions été amené à poursuivre ce projet nous aurions souhaité appliquer notre modèle au dataset https://huggingface.co/datasets/yuvalkirstain/pexel_images_lots_with_generated_captions qui se spécialise sur des portraits humains ou d'animaux. Cela nous aurait permis de juger de la qualité de notre premier dataset, et de voir les performances de notre modèle lorsqu'il est entraîné dans un contexte précis (ici identifier l'individu et l'activité dans un portrait).
+
+- Nous aurions également pu produire une nouvelle tête plus riche au modèle convolutionnel pré-entraîné. Ici on s'en est servi uniquement pour lier inceptionV3 au LSTM, mais nous aurions pu ajouter quelques hidden layers fully connected pour produire des embeddings potentiellement meilleurs, ou même créer une nouvelle couche de convolution pour obtenir des feature maps plus pertinentes en premier lieu pour notre tâche.
+
+- Enfin, le choix le plus intéressant que nous souhaiterions mettre en place est de remplacer le LSTM par un transformer de type Decoder (famille BERT...). En effet, les LSTM ont été abandonnés il y a plusieurs années pour le NLP car leurs résultats sont nettement inférieurs à ceux des transformers basés sur l'attention. La courbe suivante précise justement à quel point la précision des transformers est aujourd'hui meilleure.
+
+<figure><center>
+<img src="./Autres figures rapport/Transformer-based-VS-LSTM-based-models-performance-comparison-with-different.png">
+</center></figure>
+
+## Répartition des tâches
+
+Même si cet historique GIT semble indiquer que nous avons chacun réalisé différentes tâches à différentes périodes lors de ce projet, la vérité est que nous avons travaillé la plupart du temps ensemble sur une machine de l'université car nos ordinateurs personnels n'étaient pas assez puissants.
+
+En termes de répartition du travail, il serait donc plus juste de dire que Violette Pelgrims a travaillé en particulier sur le pre-processing (jusqu'à la création des dataloaders) et les tests tandis que Lucas Kloubert a davantage travaillé sur la conception du modèle et les fonctions d'entraînement et de validation. Les éléments restants (tracé des courbes, formation du dataset...) ont toujours été réalisés avec l'ensemble des membres présents.
+
 ## Références
 
 - https://github.com/aladdinpersson/Machine-Learning-Collection/tree/master/ML/Pytorch/more_advanced/image_captioning
 - https://cloud.google.com/tpu/docs/inception-v3-advanced?hl=fr
 - https://www.researchgate.net/profile/Han-Jiang-24/publication/327027035/figure/fig5/AS:675154577350660@1537980803771
 - https://openaccess.thecvf.com/content_WACVW_2020/papers/w3/Zhang_Impact_of_ImageNet_Model_Selection_on_Domain_Adaptation_WACVW_2020_paper.pdf
+- https://huggingface.co/datasets/yuvalkirstain/pexel_images_lots_with_generated_captions
 
 ### Besoin d'extraire les features de l'image
 
