@@ -83,73 +83,178 @@ model.eval()
 imgs_path = []
 captions = []
 
-path = "Examples/dog.jpg"
+path = "Examples/866841633_05d273b96d.jpg"
 imgs_path.append(path)
 test_img1 = transform(Image.open(path).convert("RGB")).unsqueeze(
         0
     )
 caption = " ".join(model.caption_image(test_img1, dataset.vocab))
 captions.append(caption)
-print("Example 1: Dog on a beach by the ocean")
+print("Example 1: Two kayaks in the water")
 print(
         "Example 1 OUTPUT: "
         + caption
     )
 
-path = "Examples/boat.png"
+path = "Examples/953941506_5082c9160c.jpg"
 imgs_path.append(path)
 test_img2 = transform(Image.open(path).convert("RGB")).unsqueeze(
         0
     )
 caption = " ".join(model.caption_image(test_img2, dataset.vocab))
 captions.append(caption)
-print("Example 2: A small boat in the ocean")
+print("Example 2: A dog walking on the beach")
 print(
         "Example 2 OUTPUT: "
         + caption
     )
 
 
-path = "Examples/bus.png"
+path = "Examples/584484388_0eeb36d03d.jpg"
 imgs_path.append(path)
 test_img3 = transform(Image.open(path).convert("RGB")).unsqueeze(
         0
     )
 caption = " ".join(model.caption_image(test_img3, dataset.vocab))
 captions.append(caption)
-print("Example 3: Bus driving by parked cars")
+print("Example 3: Two dogs finding for a ball toy in the grass")
 print(
         "Example 3 OUTPUT: "
         + caption
     )
 
 
-path = "Examples/child.jpg"
+path = "Examples/619169586_0a13ee7c21.jpg"
 imgs_path.append(path)
 test_img4 = transform(Image.open(path).convert("RGB")).unsqueeze(
         0
     )
 caption = " ".join(model.caption_image(test_img4, dataset.vocab))
 captions.append(caption)
-print("Example 4: Child holding red frisbee outdoors")
+print("Example 4: A man standing on a mountain")
 print(
         "Example 4 OUTPUT: "
         + caption
     )
 
 
-path = "Examples/horse.png"
+path = "Examples/621000329_84f48948eb.jpg"
 imgs_path.append(path)
 test_img5 = transform(Image.open(path).convert("RGB")).unsqueeze(
         0
     )
 caption = " ".join(model.caption_image(test_img5, dataset.vocab))
 captions.append(caption)
-print("Example 5: A cowboy riding a horse in the desert")
+print("Example 5: A girl playing with a bowl on her head")
 print(
         "Example 5 OUTPUT: "
         + caption
     )
+
+path = "Examples/756521713_5d3da56a54.jpg"
+imgs_path.append(path)
+test_img6 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img6, dataset.vocab))
+captions.append(caption)
+print("Example 6: A woman with a camera playing with a dog in the grass")
+print(
+        "Example 6 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/771366843_a66304161b.jpg"
+imgs_path.append(path)
+test_img7 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img7, dataset.vocab))
+captions.append(caption)
+print("Example 7: Two man standing in front of a rock formation")
+print(
+        "Example 7 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/818340833_7b963c0ee3.jpg"
+imgs_path.append(path)
+test_img8 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img8, dataset.vocab))
+captions.append(caption)
+print("Example 8: A dog with a stick in his mouth in the grass")
+print(
+        "Example 8 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/dog.jpg"
+imgs_path.append(path)
+test_img9 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img9, dataset.vocab))
+captions.append(caption)
+print("Example 9: A dog on a beach facing the ocean")
+print(
+        "Example 9 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/boat.png"
+imgs_path.append(path)
+test_img10 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img10, dataset.vocab))
+captions.append(caption)
+print("Example 10: A boat on the water")
+print(
+        "Example 10 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/bus.png"
+imgs_path.append(path)
+test_img11 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img11, dataset.vocab))
+captions.append(caption)
+print("Example 11: A bus driving down the street")
+print(
+        "Example 11 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/child.jpg"
+imgs_path.append(path)
+test_img12 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img12, dataset.vocab))
+captions.append(caption)
+print("Example 12: A child playing with a red frisbee")
+print(
+        "Example 12 OUTPUT: "
+        + caption
+    )
+
+path = "Examples/horse.png"
+imgs_path.append(path)
+test_img13 = transform(Image.open(path).convert("RGB")).unsqueeze(
+        0
+    )
+caption = " ".join(model.caption_image(test_img13, dataset.vocab))
+captions.append(caption)
+print("Example 13: A horse standing in the desert")
+print(
+        "Example 13 OUTPUT: "
+        + caption
+    )
+
 
 """
 To print a test batch
