@@ -79,7 +79,6 @@ On s'est également intéressé au contenu des descriptions, pour cela on a affi
     <figure>
         <figcaption>33 mots les plus utilisés dans les descriptions.</figcaption>
         <img src="Examples/most_used_words.png" alt="Most used words">
-        
     </figure>
 </center>
 
