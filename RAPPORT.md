@@ -1,6 +1,9 @@
 # <center>Image Captioning</center>
 
+## Table des matières
+
 - [Image Captioning](#image-captioning)
+  - [Table des matières](#table-des-matières)
   - [I. Introduction](#i-introduction)
   - [II. Choix du modèle](#ii-choix-du-modèle)
   - [III. Choix du dataset](#iii-choix-du-dataset)
@@ -38,8 +41,9 @@ On s'est également intéressé au contenu des descriptions, pour cela on a affi
 
 <center>
     <figure>
-        <img src="Examples/most_used_words.png" alt="Most used words">
         <figcaption>33 mots les plus utilisés dans les descriptions.</figcaption>
+        <img src="Examples/most_used_words.png" alt="Most used words">
+        
     </figure>
 </center>
 
@@ -68,24 +72,24 @@ Tout d'abord, nous avons choisi de tester le modèle sur des images trouvées su
 
 <center>
     <figure>
-        <img src="Examples/boat.png" alt="Boat">
         <figcaption>Exemple 1 : a man is standing on a rock overlooking a lake.</figcaption>
+        <img src="Examples/boat.png" alt="Boat">
     </figure> <br>
     <figure>
-        <img src="Examples/bus.png" alt="Bus">
         <figcaption>Exemple 2 : a man in a red shirt and black pants is sitting on a bench.</figcaption>
-    </figure> <br>
+        <img src="Examples/bus.png" alt="Bus">
+        </figure> <br>
     <figure>
         <img src="Examples/child.jpg" alt="Child">
         <figcaption>Exemple 3 : a little girl in a pink shirt is walking on a sidewalk.</figcaption>
     </figure> <br>
     <figure>
-        <img src="Examples/dog.jpg" alt="Dog">
         <figcaption>Exemple 4 : a dog is running through the water.</figcaption>
+        <img src="Examples/dog.jpg" alt="Dog">
     </figure> <br>
     <figure>
-        <img src="Examples/horse.png" alt="Horse">
         <figcaption>Exemple 5 : a man is standing on a rock overlooking a lake.</figcaption>
+        <img src="Examples/horse.png" alt="Horse">
     </figure><br>
 </center>
 
@@ -101,34 +105,34 @@ Intéressons nous maintenant aux images présentent dans la base de test, qui vo
 <center>
     <figure>
         <figcaption>Exemple 6 : A man wearing a orange vest is canoeing in the blue water.</figcaption>
-        <img src="Examples/866841633_05d273b96d.jpg" alt="Boat">
         <figcaption>Prediction : a man in a red jacket is standing on a rock overlooking a lake.</figcaption>
-    </figure> <br>
+        <img src="Examples/866841633_05d273b96d.jpg" alt="Boat">
+    </figure>
     <figure>
         <figcaption>Exemple 7 : The men are in a rocky mountain area.</figcaption>
-        <img src="Examples/771366843_a66304161b.jpg" alt="Bus">
         <figcaption>Prédiction : a man in a red shirt is standing on a rock ledge with his arms outstretched.</figcaption>
-    </figure> <br>
+        <img src="Examples/771366843_a66304161b.jpg" alt="Bus">
+    </figure>
     <figure>
         <figcaption>Exemple 8 : A little girl smiles as she wears a white bowl on the top of her head.</figcaption>
-        <img src="Examples/621000329_84f48948eb.jpg" alt="Child">
         <figcaption>Prédiction : a young boy is playing with a toy car.</figcaption>
-    </figure> <br>
+        <img src="Examples/621000329_84f48948eb.jpg" alt="Child">
+    </figure>
     <figure>
         <figcaption>Exemple 9 : A Beagle dog is walking on the shoreline at the beach.</figcaption>
-        <img src="Examples/953941506_5082c9160c.jpg" alt="Dog">
         <figcaption>Prédiction : a dog is running through the water.</figcaption>
-    </figure> <br>
+        <img src="Examples/953941506_5082c9160c.jpg" alt="Dog">
+    </figure>
     <figure>
         <figcaption>Exemple 10 : Two brown dogs are playing with a red ball.</figcaption>
-        <img src="Examples/584484388_0eeb36d03d.jpg" alt="Horse">
         <figcaption>Prédiction : a dog is running through a field of grass.</figcaption>
-    </figure><br>
+        <img src="Examples/584484388_0eeb36d03d.jpg" alt="Horse">
+    </figure>
     <figure>
         <figcaption>Exemple 11 : A woman in a brown jacket is standing on a rock with a forested background.</figcaption>
-        <img src="Examples/619169586_0a13ee7c21.jpg" alt="Horse">
         <figcaption>Prédiction : a man in a red jacket is standing on a rock ledge with his arms outstretched.</figcaption>
-    </figure><br>
+        <img src="Examples/619169586_0a13ee7c21.jpg" alt="Horse">
+    </figure>
 </center>
 
 L'exemple 6 confirme notre intuition de phrase générique brodée autour d'un ou deux éléments puisqu'on retrouve la phrase "standing on a rock overlooking a lake" mais cette fois avec le détail de la couleur orange du kayak et du gilet qui amène la nuance "in a red jacket". Le modèle ne reconnaît toujours pas de "moyen" de transport et ne mentionne pas le kayak.
