@@ -14,7 +14,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 
 
-def eval_CNN_to_RNN(path, eval_dataloader, loss_fn, embed_size, hidden_size, vocab_size, num_layers, batch_size=32):
+def eval_CNN_to_RNN(path, eval_dataloader, loss_fn, embed_size, hidden_size, vocab_size, num_layers):
     #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = CNN_TO_RNN(embed_size, hidden_size, vocab_size, num_layers)
     model.load_state_dict(torch.load(path))
@@ -40,5 +40,5 @@ def eval_CNN_to_RNN(path, eval_dataloader, loss_fn, embed_size, hidden_size, voc
             )
             valid_loss += loss_this_batch.item() #* images.shape[0]
         
-    valid_loss = valid_loss / (len(eval_dataloader)*batch_size)
+    valid_loss = valid_loss / len(eval_dataloader.dataset)
     return valid_loss

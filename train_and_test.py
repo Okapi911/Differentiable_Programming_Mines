@@ -27,12 +27,13 @@ def train(batch_size):
     )
 
     
-    train_loader, valid_loader, test_loader, dataset = get_loader(
+    train_loader, valid_train, test_loader, dataset = get_loader(
         root_folder="./flickr8k/images",
         annotation_file="./flickr8k/captions.txt",
         transform=transform,
         num_workers=2,
-        batch_size = batch_size
+        batch_size = batch_size,
+        type = 'train'
     )
 
     torch.backends.cudnn.benchmark = True
@@ -46,7 +47,7 @@ def train(batch_size):
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 40
+    num_epochs = 1
 
 
     # for tensorboard
@@ -75,8 +76,6 @@ def train(batch_size):
     valid_losses = []
 
     for epoch in range(num_epochs):
-
-        print(epoch)
 
         loss_this_epoch = 0.
 
@@ -114,33 +113,31 @@ def train(batch_size):
 
         torch.save(model.state_dict(), 'model_temp.pt')
 
-        valid_loss = eval_CNN_to_RNN('model_temp.pt', valid_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]), embed_size=embed_size, hidden_size=hidden_size, vocab_size=vocab_size, num_layers=num_layers)
+        valid_loss = eval_CNN_to_RNN('model_temp.pt', train_loader, loss_fn=nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"]), embed_size=embed_size, hidden_size=hidden_size, vocab_size=vocab_size, num_layers=num_layers)
         valid_losses.append(valid_loss)
 
-    return model, train_loader, dataset, losses, losses_per_epoch, valid_losses, valid_loader, test_loader
+    return model, train_loader, dataset, losses, losses_per_epoch, valid_loss
 
 
 if __name__ == "__main__":
     batch_size=32
-    model, train_loader, dataset, losses, losses_per_epoch, valid_losses, valid_loader, test_loader = train(batch_size)
+    model, train_loader, dataset, losses, losses_per_epoch, valid_loss = train(batch_size)
     print('finished normally')
-    torch.save(model.state_dict(), 'model_image_captioningf.pt')
+    torch.save(model.state_dict(), 'model_image_captioning3.pt')
 
     import matplotlib.pyplot as plt
 
     plt.plot(losses)
     plt.show()
 
-    torch.save(losses, 'lossesf.pt')
+    torch.save(losses, 'losses3.pt')
 
     plt.plot(losses_per_epoch)
-    plt.plot(valid_losses)
+    plt.plot(valid_loss)
     plt.show()
 
-    torch.save(losses_per_epoch, 'losses_per_epochf.pt')
-    torch.save(valid_losses, 'valid_lossf.pt')
-
-    torch.save(test_loader, 'test_loaderf.pt')
+    torch.save(losses_per_epoch, 'losses_per_epoch3.pt')
+    torch.save(valid_loss, 'valid_loss3.pt')
 
     #Tests
 
